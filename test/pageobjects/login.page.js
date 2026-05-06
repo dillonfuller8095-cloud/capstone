@@ -8,7 +8,6 @@ class LoginPage extends Page {
   get btnSubmit() { return $('[data-testid="login-submit"]') }
 
   async login(email, password) {
-    await browser.pause(3000)
     await this.inputUsername.waitForDisplayed({ timeout: 30000 })
     await this.inputUsername.setValue(email)
     await this.inputPassword.setValue(password)

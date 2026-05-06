@@ -1,4 +1,4 @@
-import { $, $$, browser } from '@wdio/globals'
+import { $, browser } from '@wdio/globals'
 import Page from './page.js'
 
 class NewCasePage extends Page {
@@ -24,7 +24,6 @@ class NewCasePage extends Page {
   async enterRetainedDate() {
     await this.retainedDateInput.waitForDisplayed({ timeout: 15000 })
     await this.retainedDateInput.click()
-    await browser.pause(1000)
     await this.day30.waitForClickable({ timeout: 10000 })
     await this.day30.click()
   }
@@ -32,7 +31,6 @@ class NewCasePage extends Page {
   async selectRetainedBy() {
     await this.retainedByButton.waitForClickable({ timeout: 15000 })
     await this.retainedByButton.click()
-    await browser.pause(1000)
     const selectors = [
       '//div[@role="menuitemradio"][1]',
       '//div[@role="menuitem"][1]',
@@ -51,7 +49,6 @@ class NewCasePage extends Page {
     await this.applyTemplateButton.waitForClickable({ timeout: 15000 })
     await this.applyTemplateButton.scrollIntoView()
     await this.applyTemplateButton.click()
-    await browser.pause(1500)
 
     const templateSelectors = [
       '//div[@role="menuitem"][1]',
@@ -100,6 +97,10 @@ class NewCasePage extends Page {
   async enterOverview(text) {
     await this.overviewTextarea.waitForDisplayed({ timeout: 15000 })
     await this.overviewTextarea.setValue(text)
+  }
+
+  async waitForPageToLoad() {
+    await this.caseNameInput.waitForDisplayed({ timeout: 15000 })
   }
 
   open() { return super.open('case/new') }
