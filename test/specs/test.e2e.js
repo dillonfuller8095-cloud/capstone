@@ -1,3 +1,4 @@
+// Initial test setup
 import LoginPage from '../pageobjects/login.page.js'
 import NewCasePage from '../pageobjects/newCase.page.js'
 
@@ -18,6 +19,23 @@ describe('Fill New Case Form', () => {
   })
 
   // --- VALID TESTS ---
+
+  it('Combined - stepwise full form fill then apply template last', async () => {
+    await NewCasePage.enterCaseName('Combined Stepwise Case')
+    await browser.pause(1000)
+    await NewCasePage.enterRetainedDate()
+    await browser.pause(1000)
+    await NewCasePage.selectRetainedBy()
+    await browser.pause(1000)
+    await NewCasePage.enterBilling('500.00')
+    await browser.pause(1000)
+    await NewCasePage.enterDescription('Combined stepwise description')
+    await browser.pause(1000)
+    await NewCasePage.enterOverview('Combined stepwise overview after filling each field.')
+    await browser.pause(1000)
+    await NewCasePage.applyTemplate()
+    await browser.pause(2000)
+  })
 
   it('Valid - fills all required fields', async () => {
     await NewCasePage.enterCaseName('Capstone Test Case')
@@ -62,23 +80,6 @@ describe('Fill New Case Form', () => {
     await NewCasePage.enterBilling('0.01')
     await NewCasePage.enterDescription('Test description')
     await NewCasePage.enterOverview('Case with minimum billing.')
-  })
-
-  it('Combined - stepwise full form fill then apply template last', async () => {
-    await NewCasePage.enterCaseName('Combined Stepwise Case')
-    await browser.pause(1000)
-    await NewCasePage.enterRetainedDate()
-    await browser.pause(1000)
-    await NewCasePage.selectRetainedBy()
-    await browser.pause(1000)
-    await NewCasePage.enterBilling('500.00')
-    await browser.pause(1000)
-    await NewCasePage.enterDescription('Combined stepwise description')
-    await browser.pause(1000)
-    await NewCasePage.enterOverview('Combined stepwise overview after filling each field.')
-    await browser.pause(1000)
-    await NewCasePage.applyTemplate()
-    await browser.pause(2000)
   })
 
   // --- INVALID TESTS ---
