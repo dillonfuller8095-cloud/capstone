@@ -37,6 +37,38 @@ describe('Fill New Case Form', () => {
     await browser.pause(2000)
   })
 
+  it('Valid - apply template after filling full required form', async () => {
+    await NewCasePage.enterCaseName('Template Case 2026')
+    await browser.pause(1000)
+    await NewCasePage.enterRetainedDate()
+    await browser.pause(1000)
+    await NewCasePage.selectRetainedBy()
+    await browser.pause(1000)
+    await NewCasePage.enterBilling('600.00')
+    await browser.pause(1000)
+    await NewCasePage.enterDescription('Template test description')
+    await browser.pause(1000)
+    await NewCasePage.enterOverview('Template test overview after filling required fields.')
+    await browser.pause(1000)
+    await NewCasePage.applyTemplate()
+    await browser.pause(2000)
+  })
+
+  it('Invalid - empty billing amount', async () => {
+    await NewCasePage.enterCaseName('Empty Billing Case')
+    await browser.pause(1000)
+    await NewCasePage.enterRetainedDate()
+    await browser.pause(1000)
+    await NewCasePage.selectRetainedBy()
+    await browser.pause(1000)
+    await NewCasePage.enterBilling('')
+    await browser.pause(1000)
+    await NewCasePage.enterDescription('Empty billing validation test')
+    await browser.pause(1000)
+    await NewCasePage.enterOverview('Overview when billing is left empty.')
+    await browser.pause(1000)
+  })
+
   it('Valid - fills all required fields', async () => {
     await NewCasePage.enterCaseName('Capstone Test Case')
     await NewCasePage.enterRetainedDate()
