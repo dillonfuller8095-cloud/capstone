@@ -1,109 +1,164 @@
 import { $, browser } from '@wdio/globals'
-import Page from './page.js'
+import BaseCase from './page.js'
 
-class NewCasePage extends Page {
+class NewCasePage extends BaseCase {
 
-  get caseNameInput() { return $('input[name="caseName"]') }
-  get retainedDateInput() { return $('input[name="retainedDate"]') }
-  get day30() { return $('//button[normalize-space()="30"]') }
-  get retainedByButton() { return $('[data-testid="client-party-dropdown"]') }
-  get typeCombobox() { return $('input[data-testid="case-type-combobox"]') }
-  get typeFirstOption() { return $('//div[@role="option"][1]') }
-  get fixedFeeToggle() { return $('input[data-testid="case-info-card-fixed-fee-switch"]') }
-  get fixedFeeAmountInput() { return $('input[data-testid="case-info-card-fixed-fee-input"]') }
-  get descriptionTextarea() { return $('textarea[name="shortDescription.fieldValue"]') }
-  get overviewTextarea() { return $('textarea[data-testid="case-info-card-overview-input"]') }
-  get applyTemplateButton() { return $('button[data-testid="add-case-apply-template"]') }
-  get createTemplateOption() { return $('//div[@role="menuitem"][1]') }
+  retainedBySelectors = [
+    '//div[@role="menuitemradio"][1]',
+    '//div[@role="menuitem"][1]',
+    '//div[@role="option"][1]',
+  ]
+
+  templateSelectors = [
+    '//div[@role="menuitem"][1]',
+    '//div[@role="menuitemradio"][1]',
+    '//div[@role="option"][1]',
+  ]
+
+  get caseNameInput() {
+    return $('input[name="caseName"]')
+  }
+
+  get retainedDateInput() {
+    return $('[data-testid="case-retained-date-picker"]')
+  }
+
+  get day30() {
+    return $('//button[normalize-space()="30"]')
+  }
+
+  get retainedByButton() {
+    return $('[data-testid="client-party-dropdown"]')
+  }
+
+  get applyTemplateButton() {
+    return $('button[data-testid="add-case-apply-template"]')
+  }
+
+  get descriptionTextarea() {
+    return $('textarea[name="shortDescription.fieldValue"]')
+  }
+
+  get overviewTextarea() {
+    return $('textarea[data-testid="case-info-card-overview-input"]')
+  }
 
   async enterCaseName(name) {
-    await this.caseNameInput.waitForDisplayed({ timeout: 15000 })
+
+    await this.caseNameInput.waitForDisplayed({
+      timeout: 15000
+    })
+
     await this.caseNameInput.setValue(name)
+
   }
 
   async enterRetainedDate() {
-    await this.retainedDateInput.waitForDisplayed({ timeout: 15000 })
+
+    await this.retainedDateInput.waitForDisplayed({
+      timeout: 15000
+    })
+
     await this.retainedDateInput.click()
-    await this.day30.waitForClickable({ timeout: 10000 })
+
+    await this.day30.waitForClickable({
+      timeout: 10000
+    })
+
     await this.day30.click()
+
   }
 
   async selectRetainedBy() {
-    await this.retainedByButton.waitForClickable({ timeout: 15000 })
+
+    await this.retainedByButton.waitForClickable({
+      timeout: 15000
+    })
+
     await this.retainedByButton.click()
-    const selectors = [
-      '//div[@role="menuitemradio"][1]',
-      '//div[@role="menuitem"][1]',
-      '//div[@role="option"][1]',
-    ]
-    for (const sel of selectors) {
+
+    for (const selector of this.retainedBySelectors) {
+
       try {
-        const el = await $(sel)
-        if (await el.isDisplayed()) { await el.click(); return }
-      } catch (e) {}
+
+        const option = await $(selector)
+
+        await option.waitForDisplayed({
+          timeout: 5000
+        })
+
+        await option.click()
+
+        return
+
+      } catch (error) {}
+
     }
-    throw new Error('selectRetainedBy: no visible option found')
+
+    throw new Error(
+      'Unable to locate retained by option'
+    )
+
   }
 
   async applyTemplate() {
-    await this.applyTemplateButton.waitForClickable({ timeout: 15000 })
-    await this.applyTemplateButton.scrollIntoView()
+
+    await this.applyTemplateButton.waitForClickable({
+      timeout: 15000
+    })
+
     await this.applyTemplateButton.click()
 
-    const templateSelectors = [
-      '//div[@role="menuitem"][1]',
-      '//div[@role="menuitemradio"][1]',
-      '//div[@role="option"][1]',
-      '//button[normalize-space()="Create template"]'
-    ]
+    for (const selector of this.templateSelectors) {
 
-    for (const sel of templateSelectors) {
       try {
-        const option = await $(sel)
-        if (await option.isDisplayed() && await option.isClickable()) {
-          await option.click()
-          return
-        }
-      } catch (e) {
-        // continue to next selector
-      }
+
+        const option = await $(selector)
+
+        await option.waitForDisplayed({
+          timeout: 5000
+        })
+
+        await option.click()
+
+        return
+
+      } catch (error) {}
+
     }
 
-    throw new Error('applyTemplate: no visible template option found')
-  }
+    throw new Error(
+      'Unable to locate template option'
+    )
 
-  async selectType() {
-    await this.typeCombobox.waitForDisplayed({ timeout: 15000 })
-    await this.typeCombobox.click()
-    await this.typeFirstOption.waitForClickable({ timeout: 10000 })
-    await this.typeFirstOption.click()
-  }
-
-  async enterBilling(amount) {
-    const toggle = await this.fixedFeeToggle
-    await toggle.waitForExist({ timeout: 15000 })
-    await browser.execute(el => el.click(), toggle)
-    await this.fixedFeeAmountInput.waitForDisplayed({ timeout: 15000 })
-    await this.fixedFeeAmountInput.click()
-    await this.fixedFeeAmountInput.clearValue()
-    await this.fixedFeeAmountInput.setValue(amount)
   }
 
   async enterDescription(text) {
-    await this.descriptionTextarea.waitForDisplayed({ timeout: 15000 })
+
+    await this.descriptionTextarea.waitForDisplayed({
+      timeout: 15000
+    })
+
     await this.descriptionTextarea.setValue(text)
+
   }
 
   async enterOverview(text) {
-    await this.overviewTextarea.waitForDisplayed({ timeout: 15000 })
+
+    await this.overviewTextarea.waitForDisplayed({
+      timeout: 15000
+    })
+
     await this.overviewTextarea.setValue(text)
+
   }
 
-  async waitForPageToLoad() {
-    await this.caseNameInput.waitForDisplayed({ timeout: 15000 })
+  navigateToNewCase() {
+
+    return super.open('case/new')
+
   }
 
-  open() { return super.open('case/new') }
 }
 
 export default new NewCasePage()

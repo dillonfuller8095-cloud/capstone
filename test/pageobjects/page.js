@@ -1,7 +1,7 @@
 import { browser } from '@wdio/globals'
 
 export default class Page {
-  open(path) {
-    return browser.url(`https://app.thecasework.com/${path}`)
-  }
+ open(path) {
+   return browser.url(`https://app.thecasework.com/${path}`)
+ }
 }

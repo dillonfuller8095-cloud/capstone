@@ -1,5 +1,0 @@
-Tag: INPUT
-Placeholder: Case Name
-
-Tag: BUTTON
-Text: Save
